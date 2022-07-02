@@ -1,0 +1,90 @@
+<div id='user-wrapper' class="planner-user-wrapper">
+    <header>
+        <div class="module-title">
+            <div class='title'>Active Users</div>
+            <div class='underline'></div>
+        </div>
+        <div class='add-user' (click)="onAdduser()">
+            <div class="e-icon-add e-icons"></div>
+            <div class="add-user-label">Add New</div>
+        </div>
+    </header>
+    <div class="users-detail-wrapper">
+        <div class="user-operations">
+            <div id='searchTemplate' class='search-wrapper planner-user-search'>
+                <div class="e-input-group" role="search">
+                    <input id="schedule_searchbar" class="e-input" name="input" type="search"
+                        placeholder="Search user" (keyup)="userSearch($event)" />
+                    <span class="e-clear-icon" aria-label="close" role="button"
+                        (click)="userSearchCleared($event)"></span>
+                    <span id="schedule_searchbutton" class="e-input-group-icon search-icon e-icons" tabindex="-1"
+                        title="Search" aria-label="search"></span>
+                </div>
+            </div>
+            <button ejs-button cssClass="e-normal add-details" [isPrimary]="true" (click)='onAdduser()'>Add
+                New User</button>
+        </div>
+        <div class="user-display">
+            <ejs-grid #gridObj [dataSource]='filteredusers' [editSettings]='editSettings'
+                (actionComplete)='onDataEdit($event)'>
+                <e-columns>
+                    <e-column field='Id' width='50' headerText='ID' textAlign='Left'></e-column>
+                    <e-column field='Name' width='100' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <span class="user-name" (click)='onuserClick($event)'>{{data.Name}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field='Gender' width='80' textAlign='Left'></e-column>
+                    <e-column field='Mobile' headerText='Mobile Number' width='100' textAlign='Left'></e-column>
+                    <e-column field='Email' headerText='Email' width='120' textAlign='Left'></e-column>
+                </e-columns>
+                <ng-template #editSettingsTemplate let-data>
+                    <div class='grid-edit-dialog'>
+                        <div class='field-row'>
+                            <label> User Id </label><span id='Id'>{{activeuserData.Id}}</span>
+                        </div>
+                        <div class='field-row'>
+                            <label> User Name </label><span id='Name'>{{activeuserData.Name}}</span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Gender </label><span id='Gender'>{{activeuserData.Gender}}</span>
+                        </div>
+                        <div class='field-row'>
+                            <label> DOB </label><span id='DOB'>{{activeuserData.DOB}}</span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Mobile Number </label><span id='Mobile'>{{activeuserData.Mobile}}</span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Email </label><span id='Email'>{{activeuserData.Email}}</span>
+                        </div>
+                        <div class='field-row history-row'>
+                            <label>Appointment History</label>
+                        </div>
+                    </div>
+                </ng-template>
+            </ejs-grid>
+        </div>
+    </div>
+</div>
+<app-add-edit-user #addEdituserObj (refreshEvent)="gridRefresh()"></app-add-edit-user>
+<div class="delete-confirmation-container" style="display:none">
+    <ejs-dialog #deleteConfirmationDialogObj width='445px' cssClass='break-hour-dialog' [isModal]='true'
+        [visible]='false' [animationSettings]='animationSettings' header='user Details' [showCloseIcon]='true'
+        target='body'>
+        <ng-template #content>
+            <form>
+                <div>
+                    Are you sure you want to delete this user?
+                </div>
+            </form>
+        </ng-template>
+        <ng-template #footerTemplate>
+            <div class="button-container">
+                <button ejs-button cssClass="e-normal" [isPrimary]="true" (click)='onDeleteClick()'>Ok</button>
+                <button ejs-button cssClass="e-normal" (click)='onDeleteCancelClick()'>Cancel</button>
+            </div>
+        </ng-template>
+    </ejs-dialog>
+</div>
+

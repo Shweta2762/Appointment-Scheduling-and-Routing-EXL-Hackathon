@@ -1,0 +1,48 @@
+<div class="new-user-container" style="display:none">
+  <ejs-dialog #newuserObj width='390px' cssClass='new-user-dialog' [isModal]='true' [visible]='false'
+    [animationSettings]='animationSettings' [header]='title' [showCloseIcon]='true' target='body'
+    (beforeOpen)='onBeforeOpen($event)'>
+    <ng-template #content>
+      <form id='new-user-form'>
+        <div class="field-container name-container">
+          <ejs-textbox id='Name' name='Name' cssClass='user-name e-field' placeholder='user Name'
+            floatLabelType='Always'></ejs-textbox>
+        </div>
+        <div class="field-container gender-container">
+          <div class="gender">
+            <div><label>Gender</label></div>
+            <div class='e-btn-group e-round-corner e-field'>
+              <input type="radio" id="agencyCheckMale" name="Gender" value="Male" checked
+                (change)='onGenderChange($event)' />
+              <label class="e-btn" for="agencyCheckMale">Male</label>
+              <input type="radio" id="agencyCheckFemale" name="Gender" value="Female"
+                (change)='onGenderChange($event)' />
+              <label class="e-btn" for="agencyCheckFemale">Female</label>
+            </div>
+          </div>
+          <div class="dob">
+            <ejs-datepicker id='DOB' cssClass='e-field' placeholder='DOB' [value]='dobValue' floatLabelType='Always'
+              [showClearButton]='false'></ejs-datepicker>
+          </div>
+        </div>
+        <div class="field-container contact-container">
+          <div class="mobile">
+            <ejs-maskedtextbox id='userMobile' name='Mobile' cssClass='e-field' width='180px' placeholder='Mobile Number'
+              mask="(91) 999-999-9999" floatLabelType='Always'>
+            </ejs-maskedtextbox>
+          </div>
+        </div>
+        <div class="field-container email-container">
+          <ejs-textbox cssClass='e-field' id='Email' name='Email' placeholder='Email' floatLabelType='Always'>
+          </ejs-textbox>
+        </div>
+      </form>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <div class="button-container">
+        <button ejs-button cssClass="e-normal" (click)='onCancelClick()'>Cancel</button>
+        <button ejs-button cssClass="e-normal" [isPrimary]="true" (click)='onSaveClick()'>Save</button>
+      </div>
+    </ng-template>
+  </ejs-dialog>
+</div>

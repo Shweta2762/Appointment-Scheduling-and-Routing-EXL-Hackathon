@@ -1,0 +1,152 @@
+<div class="agency-details-container">
+  <header>
+    <div class="detail-header-title">
+      <span class="back-icon icon-previous" (click)='onBackIconClick()'></span>
+      <div class="module-title">
+        <div class='title'>AGENCY DETAILS</div>
+        <div class='underline'></div>
+      </div>
+    </div>
+    <div class='agency-detail'>
+      <button ejs-button cssClass="e-small delete-details" (click)='onagencyDelete()'>Delete</button>
+      <button ejs-button cssClass="e-small edit-details" (click)='onagencyEdit()'>Edit</button>
+    </div>
+  </header>
+  <div class="active-agency">
+    <div class="active-agency-image">
+      <img class="value" src="./assets/images/{{activeData.Text}}.png" alt="agency" />
+      <span class='availability {{activeData.Availability}}'></span>
+      <span class='upload icon-upload_photo {{activeData.NewagencyClass}}'></span>
+    </div>
+    <div class="active-agency-info">
+      <div class="basic-detail info-field-container">
+        <div class="name">{{activeData.Name}}, {{activeData.Designation}}
+        </div>
+        <div class="designation">City: {{activeData.city}}</div>
+      </div>
+      <div class="speciality-detail info-field-container">
+        <div class="label-text">Specialization</div>
+        <div class="specialization">{{getSpecializationText(activeData.Specialization)}}</div>
+      </div>
+      <div class="work-experience info-field-container">
+        <div class="label-text">Experience</div>
+        <div class="experience">{{activeData.Experience}}</div>
+      </div>
+      <div class="work-availability info-field-container">
+        <div class="label-text">Availability</div>
+        <div class="available-days">{{getAvailability(activeData)}}</div>
+      </div>
+      <div class="contact-info info-field-container">
+        <div class="label-text">Mobile</div>
+        <div class="mobile">{{activeData.Mobile}}</div>
+      </div>
+    </div>
+
+    <div class="work-days-container">
+      <header>
+        <div class="title-text">Break Hours</div>
+        <div class="add-container" (click)='onAddBreak()'>
+          <button ejs-button cssClass="e-small e-round" iconCss="e-icons e-add-icon" [isPrimary]="true"></button>
+          <span class="button-label">Add</span>
+        </div>
+      </header>
+      <div class="work-days-content">
+        <div class='work-day-item' *ngFor="let data of activeData.WorkDays">
+          <div class="day-name">{{getWorkDayName(data.Day)}}</div>
+          <div class="day-break-hours {{data.State}}">{{getBreakDetails(data)}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="break-hours-container" style="display:none">
+  <ejs-dialog #breakHourObj width='445px' cssClass='break-hour-dialog' [isModal]='true' [visible]='false'
+    [animationSettings]='animationSettings' header='Break Hours' [showCloseIcon]='true' target='body'>
+    <ng-template #content>
+      <form>
+        <div class="break-hour-operations">
+          * Click on day to add break, double click to take time off and third click to remove break
+        </div>
+        <div class="break-hour-header">
+          <div></div>
+          <div>Start Time</div>
+          <div>End Time</div>
+        </div>
+        <div class='break-hour-days' *ngFor="let day of breakDays">
+          <div class="day-button {{day.State}}">
+            <button ejs-button id={{day.Day}}_button cssClass="e-small e-round" [isPrimary]="true"
+              (click)='onChangeStatus($event)' [attr.data-state]=day.State>{{getDayName(day.Day)}}</button>
+          </div>
+          <div class="start-container {{day.State}}">
+            <ejs-timepicker cssClass="e-field" id={{day.Day}}_start [enabled]=getStatus(day.State)
+              [value]=day.BreakStartHour [showClearButton]=false></ejs-timepicker>
+          </div>
+          <div class="end-container {{day.State}}">
+            <ejs-timepicker cssClass='e-field' id={{day.Day}}_end [enabled]=getStatus(day.State)
+              [value]=day.BreakEndHour [showClearButton]=false></ejs-timepicker>
+          </div>
+          <div class='state-container {{day.State}}'>
+            <div>Time Off</div>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <div class="button-container">
+        <button ejs-button cssClass="e-normal" (click)='onCancelClick()'>Cancel</button>
+        <button ejs-button cssClass="e-normal" [isPrimary]="true" (click)='onSaveClick()'>Save</button>
+      </div>
+    </ng-template>
+  </ejs-dialog>
+</div>
+<app-add-edit-agency #addEditagencyObj (refreshagencys)="refreshDetails()"></app-add-edit-agency>
+<div class="delete-confirmation-container" style="display:none">
+  <ejs-dialog #deleteConfirmationDialogObj width='445px' cssClass='break-hour-dialog' [isModal]='true' [visible]='false'
+    [animationSettings]='animationSettings' header='agency Details' [showCloseIcon]='true' target='body'>
+    <ng-template #content>
+      <form>
+        <div>Are you sure you want to delete this agency?</div>
+      </form>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <div class="button-container">
+        <button ejs-button cssClass="e-normal" [isPrimary]="true" (click)='onDeleteClick()'>Ok</button>
+        <button ejs-button cssClass="e-normal" (click)='onDeleteCancelClick()'>Cancel</button>
+      </div>
+    </ng-template>
+  </ejs-dialog>
+</div>
+<div *ngIf="(activeData.city === 'Ahmedabad')">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d235014.25792023944!2d72.43965638232845!3d23.020181763437073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e848aba5bd449%3A0x4fcedd11614f6516!2sAhmedabad%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1656769163467!5m2!1sen!2sin"
+    width="90%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+<div *ngIf="(activeData.city === 'Chennai')">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248756.1167539604!2d80.06892487799826!3d13.047487785851796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1656770326035!5m2!1sen!2sin"
+    width="90%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+<div *ngIf="(activeData.city === 'Mumbai')">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.11609859002!2d72.74109963251524!3d19.082197839337027!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1656770435278!5m2!1sen!2sin"
+    width="90%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+<div *ngIf="(activeData.city === 'Delhi')">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d448183.7390806598!2d76.81307179071017!3d28.646677257441528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x37205b715389640!2sDelhi!5e0!3m2!1sen!2sin!4v1656770484992!5m2!1sen!2sin"
+    width="90%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+<div *ngIf="(activeData.city === 'Bengaluru')">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248849.8865401048!2d77.49085262352496!3d12.953959987105064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sBengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1656770576302!5m2!1sen!2sin"
+    width="90%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>

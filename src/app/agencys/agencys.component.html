@@ -1,0 +1,87 @@
+<div style="font-size: 50px;" class="position-relative marquee-container d-none d-sm-block">
+  <div class="marquee d-flex justify-content-around">
+    <span>This</span>
+    <span>is</span>
+    <span>a</span>
+    <span>platform</span>
+    <span>to</span>
+    <span>book</span>
+    <span>appointment</span>
+    <span>with</span>
+    <span>any</span>
+
+  </div>
+  <div class="marquee marquee2 d-flex justify-content-around">
+    <span>agency.</span>
+    <span>We</span>
+    <span>are</span>
+    <span>not</span>
+    <span>responsible</span>
+    <span>for</span>
+    <span>any</span>
+    <span>discrepancy.</span>
+  </div>
+</div>
+
+
+<div class="agencys-wrapper">
+  <header>
+    <div class="module-title">
+      <div class='title'>AGENCY LIST 
+        <h1>(To view map, click on respected agency)</h1></div>
+      <div class='underline'></div>
+    </div>
+    <div class='add-agency' (click)="onAddagency()">
+      <div class="e-icon-add e-icons"></div>
+      <div class="add-agency-label">Add New</div>
+    </div>
+  </header>
+  <div class="specialization-detail-wrapper">
+    <div class="specialization-types">
+      <ejs-dropdownlist id='Specialization' #specializationObj [dataSource]='specializationData'
+        [showClearButton]='true' (change)='onSpecializationChange($event)' [fields]='fields'
+        placeholder='Select a Specialization' popupWidth='100%' popupHeight='230px'>
+        <ng-template #itemTemplate let-data>
+          <div class="specialist-value">
+            <span class="{{data.Id}}" [style.background]="getColor(data)"></span>
+            <span class="name">{{data.Text}}</span>
+          </div>
+        </ng-template>
+        <ng-template #valueTemplate let-data>
+          <div class="specialist-value department-value">
+            <span class="{{data.Id}}" [style.background]="getColor(data)"></span>
+            <span class="name">{{data.Text}}</span>
+          </div>
+        </ng-template>
+      </ejs-dropdownlist>
+      <button ejs-button cssClass="e-normal" (click)='onAddagency()' [isPrimary]="true">Add New Agency</button>
+    </div>
+    <div #specialistItemObj class='specialist-display'>
+      <div (click)='onSpecialistClick($event)' *ngFor="let data of filteredagencys">
+        <div class="e-cards specialist-item" id=Specialist_{{data.Id}}>
+          <div class="e-card-content">
+            <div class="specialist-image">
+              <img class="profile" src="./assets/images/{{data.Text}}.png" alt="agency" />
+              <span class='availability {{data.Availability}}'></span>
+              <span class='upload icon-upload_photo {{data.NewagencyClass}}'></span>
+            </div>
+          </div>
+          <div class="specialist-detail">
+            <div class="name">{{data.Name}} {{data.Designation}}, {{data.city}}</div>
+            <div class="specialist-experience">
+              <div class="specialization">
+                <span class="label-text">Available Agent Qualification</span>
+                <span class="specialization-text">{{getEducation(data.Education)}}</span>
+              </div>
+              <div class="experience">
+                <span class="label-text">Experience</span>
+                <span class="specialization-text">{{data.Experience}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-add-edit-agency #addEditagencyObj (refreshagencys)="updateagencys()"></app-add-edit-agency>
